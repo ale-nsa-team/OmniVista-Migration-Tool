@@ -1,0 +1,34 @@
+# ---------------------------------------------------------------------------
+# AP Group to Site Mapping (optional)
+#
+# Purpose:
+#   Maps each OV4 AP Group to the OV10 Site it should be created in.
+#
+# When to use:
+#   Only if you have configured Sites in your OV10 organization and want your
+#   OV4 AP Groups distributed across them.
+#
+# Default behavior:
+#   If this file is left empty, every AP Group is mapped to the Default Site
+#   specified in the .toml configuration file.
+#
+# How to fill:
+#   1. Uncomment the sample row below (remove the leading '#').
+#   2. Replace the placeholder values with your real AP Group names and Site Ids.
+#   3. Add one row per AP Group.
+#
+# Rules:
+#   - An AP Group may be mapped to exactly one Site. Listing the same AP Group
+#     twice aborts the migration.
+#   - The Site Id is the 24-character id from the OV10 URL, e.g. 6a01822e47e327655a5b4979.
+#   - AP Group names are matched exactly, including spaces and characters such as '*'.
+#     Wrap a name containing a comma in double quotes: "Warehouse-APs, Legacy",<SiteId>
+#     A name that starts with '#' must also be quoted: "#Staging-APs",<SiteId>
+#   - The migration tool validates this file before migrating anything. If a row is
+#     malformed, or an AP Group / Site Id does not exist, the whole migration aborts.
+# ---------------------------------------------------------------------------
+OV4 AP Group Name,OV10 Site Id
+#APGroupName1,SiteId11111
+#AP Group Name2,SiteId11111
+#AP Group3,SiteId22222
+#AP Group1,SiteId22222

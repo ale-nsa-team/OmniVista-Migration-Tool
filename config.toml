@@ -1,0 +1,49 @@
+# Migration Tool::Configuration
+# Copy this file to config.local.toml and update with your actual configurations
+
+# Secret key pass is used for encrypting password attributes
+secret_key_pass = "your-secret-key-password"
+# The directory where collected data will be saved
+# data_dir = "."
+# Minimal log level (CRITICAL, ERROR, WARNING, INFO, DEBUG)
+# log_level = "DEBUG"
+
+# Trust specific certificate fingerprints for SSL connections
+# Use this when connecting to servers with self-signed certificates or non-standard CA chains
+# Get the fingerprint: openssl s_client -connect hostname:443 < /dev/null 2>/dev/null | openssl x509 -fingerprint -sha256 -noout
+# Format: Compact hex (64 chars) or colon-separated
+[trusted_certs]
+# ovc4 = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+# ovc10 = "f6e5d4c3b2a1098765432109876543210fedcba9876543210fedcba987654321"
+
+[ovc4]
+base_url = "https://your-ovc4-server.com"
+token = "your-ovc4-api-token"
+# max_workers = 8 # Number of parallel workers for data collection
+# account_processing_max_workers = 8 # Worker cap for guest/employee account processing
+# collect_request_timeout_ms = 30000 # Socket timeout for OVC4 API during collection
+# device_source = "ovc4" # Device source: "ovc4" for OVC4 inventory, "ove" for OVE/managed devices
+
+[ovc10]
+base_url = "https://your-ovc10-server.com"
+org_id = "your-organization-id"
+site_id = "your-site-id"
+email = "your-email@domain.com"
+password = "your-password"
+app_id = "your-app-id"
+app_secret = "your-app-secret"
+# skip_devices = true # Skip device migration when using --data-dir
+# mgmt_template = "OVC10 Default User Mgmt Template" # Override the switch management template
+# snapshot_file = "data_file.json" # w
+# Optional: place AP Groups (and their APs) in specific OV10 Sites.
+# Defaults to ov4APGroupToOV10SiteMapping.csv in the current directory when present.
+# mapAPGroupsToSites = "ov4APGroupToOV10SiteMapping.csv"
+
+[migration]
+# migration_request_timeout_ms = 2000 # Socket timeout for OVC10 API (fail fast on hangs)
+# migration_request_max_retries = 5 # Retry transient OVC10 failures
+# migration_request_retry_backoff_ms = 500 # Base backoff for migration retries (exponential)
+# migration_request_interval_ms = 100 # Min delay between OVC10 migration requests
+# migration_parallel_standalone = true # Parallelize standalone object types only
+# migration_max_workers = 8 # Worker threads for guest/employee account migration (default: 8, lower to reduce OVC10 load)
+
