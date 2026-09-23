@@ -1,6 +1,6 @@
 # OVE/OVC4 to OV10 Migration Tool
 
-A tool used for migrating data from OVE/OVC4 to OVC10.
+A tool used for migrating data from OVE/OVC4 to OV10.
 
 **Version:** 1.0.1
 
@@ -8,7 +8,7 @@ Migrate network configuration data from OVE/OVC4 to OVC10 systems with automatic
 
 Supported migration paths :
 
-- **OVE4 → OVC10** (on-prem OmniVista 2500 NMS 4.x - use `--device-source ove`)
+- **OVE4 → OVT10** (on-prem OmniVista 2500 NMS 4.x - use `--device-source ove`)
 - **OVC4 → OVC10** (cloud OVC 4.x - use the default `--device-source ovc4`)
 
 ## Download
