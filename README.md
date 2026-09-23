@@ -1,4 +1,4 @@
-# OVE/OVC4 to OVC10 Migration Tool
+# OVE/OVC4 to OV10 Migration Tool
 
 A tool used for migrating data from OVE/OVC4 to OVC10.
 
