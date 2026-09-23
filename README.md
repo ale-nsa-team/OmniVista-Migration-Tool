@@ -4,7 +4,7 @@ A tool used for migrating data from OVE/OVC4 to OV10.
 
 **Version:** 1.0.1
 
-Migrate network configuration data from OVE/OVC4 to OVC10 systems with automatic dependency resolution.
+Migrate network configuration data from OVE/OVC4 to OV10 systems with automatic dependency resolution.
 
 Supported migration paths :
 
