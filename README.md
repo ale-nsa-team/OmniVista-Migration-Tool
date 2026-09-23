@@ -11,6 +11,20 @@ Supported migration paths (OVNG-24862 Item 9):
 - **OVE4 → OVC10** (on-prem OmniVista 2500 NMS 4.x - use `--device-source ove`)
 - **OVC4 → OVC10** (cloud OVC 4.x - use the default `--device-source ovc4`)
 
+## Download
+
+The binaries are not stored in this repository. Download them from the [latest release](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest):
+
+| File | Where | Needed for |
+|---|---|---|
+| `migration_tool.exe` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | Everyone |
+| `ovshared-4.9R3.jar` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | OVE 4.9R3 sources only (see [Prerequisites](#for-ove-version-49r3)) |
+| `sha256sum.txt` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | Verifying the downloads |
+| `config.toml` | This repository | Everyone |
+| `ov4APGroupToOV10SiteMapping.csv` | This repository | Optional, only to spread AP Groups across several OV10 Sites |
+
+Put `migration_tool.exe`, `config.toml` and `ov4APGroupToOV10SiteMapping.csv` in the same folder.
+
 ## Contents
 
 - [Officially Validated Migration Matrix](#officially-validated-migration-matrix)
