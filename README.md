@@ -119,7 +119,7 @@ Put these files in one folder on the computer that runs the tool:
 | `migration_tool.exe` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The tool. Run it in PowerShell, from this folder. |
 | `config.toml` | This repository | The configuration template: copy it to `config.local.toml` ([Step 1](#step-1-fill-in-configlocaltoml)). |
 | `ov4APGroupToOV10SiteMapping.csv` | This repository | The optional AP Group to Site mapping ([Step 4](#step-4-optional-place-ap-groups-in-several-ov10-sites)). |
-| `ovshared-4.9R3.jar` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The official OVE 4.9R3 patch, for OVE sources only ([Prerequisites](#prerequisites)). It is installed on the OVE server, not run from this folder. |
+| `ovshared-4.9R3.jar` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The official OVE 4.9R3 patch, for OVE sources only ([Prerequisites](#prerequisites)). |
 | `README.pdf` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | This guide, as a PDF. |
 | `sha256sum.txt` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The SHA-256 checksum of each release asset. |
 
@@ -636,7 +636,7 @@ Perform this phase during a scheduled maintenance window. You save the configura
 #### Save the AP Configurations
 
 > [!CAUTION]
-> Before you delete APs from OV4, save their running configuration, so that it is not lost.
+> **Critical:** before you delete APs from OV4, save their running configuration, so that it is not lost.
 
 1. Log in to the OV4 web interface.
 2. Go to **Network > Managed Devices**.
