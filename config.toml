@@ -1,49 +1,65 @@
 # Migration Tool::Configuration
 # Copy this file to config.local.toml and update with your actual configurations
 
-# Secret key pass is used for encrypting password attributes
-secret_key_pass = "your-secret-key-password"
-# The directory where collected data will be saved
-# data_dir = "."
-# Minimal log level (CRITICAL, ERROR, WARNING, INFO, DEBUG)
-# log_level = "DEBUG"
+# Lines that start with # are ignored: to set an optional key, remove the leading # and change the value.
 
-# Trust specific certificate fingerprints for SSL connections
-# Use this when connecting to servers with self-signed certificates or non-standard CA chains
-# Get the fingerprint: openssl s_client -connect hostname:443 < /dev/null 2>/dev/null | openssl x509 -fingerprint -sha256 -noout
+# OV4 is the source server, OVE or OVC4; OV10 is the target server, OVC10 or OV Terra.
+# Before 1.0.3 the sections [ov4] and [ov10] were named [ovc4] and [ovc10]; those names still work.
+
+# Secret key pass: a passphrase you choose - not an OVE/OVC4/OV10 password. collect encrypts the
+# passwords in the collected files with it, and migrate needs the same value to decrypt them.
+secret_key_pass = "your-secret-key-password"
+# The directory where collected data will be saved (default: the current folder)
+# data_dir = "."
+# The one snapshot file migrate sends when neither --data-dir nor --snapshot-file is given
+# snapshot_file = "data/ap_group_data.json"
+# Minimal log level (CRITICAL, ERROR, WARNING, INFO, DEBUG; default: INFO)
+# log_level = "INFO"
+
+# Certificate fingerprints of servers whose certificate no trusted CA signed, such as an OVE,
+# which uses a self-signed certificate by default. You do not need to fill them in: the tool reads
+# the certificate of the server, trusts it, and writes its line here (ov4 = "..." or ov10 = "...").
+# When the certificate of a server changes, the tool replaces the line and logs a warning.
 # Format: Compact hex (64 chars) or colon-separated
 [trusted_certs]
-# ovc4 = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
-# ovc10 = "f6e5d4c3b2a1098765432109876543210fedcba9876543210fedcba987654321"
+# Source: OVE or OVC4
+# ov4 = "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+# Target: OVC10 or OV Terra
+# ov10 = "f6e5d4c3b2a1098765432109876543210fedcba9876543210fedcba987654321"
 
-[ovc4]
-base_url = "https://your-ovc4-server.com"
-token = "your-ovc4-api-token"
-# max_workers = 8 # Number of parallel workers for data collection
-# account_processing_max_workers = 8 # Worker cap for guest/employee account processing
-# collect_request_timeout_ms = 30000 # Socket timeout for OVC4 API during collection
-# device_source = "ovc4" # Device source: "ovc4" for OVC4 inventory, "ove" for OVE/managed devices
+# Source server: OVE or OVC4. The tool tells them apart by the host name of base_url: a host name
+# under ovcirrus.com is an OVC4, any other is an OVE - so an OVE must not have ovcirrus.com in its
+# host name.
+[ov4]
+base_url = "https://your-ove-or-ovc4-server.com"
+token = "your-ove-or-ovc4-api-token"
+# max_workers = 5 # Number of parallel workers for data collection (default: 5)
+# account_processing_max_workers = 16 # Worker cap for guest/employee account processing (default: 16)
+# collect_request_timeout_ms = 3000 # Socket timeout for OVE/OVC4 API during collection (default: 3000)
+#                                   # A request that times out is sent twice more, with 2x then 4x this timeout
 
-[ovc10]
-base_url = "https://your-ovc10-server.com"
+# Target server: OVC10 or OV Terra. migrate authenticates with the application (app_id and
+# app_secret) only: no OV10 user email or password is needed.
+[ov10]
+base_url = "https://your-ov10-server.com"
 org_id = "your-organization-id"
 site_id = "your-site-id"
-email = "your-email@domain.com"
-password = "your-password"
 app_id = "your-app-id"
 app_secret = "your-app-secret"
 # skip_devices = true # Skip device migration when using --data-dir
-# mgmt_template = "OVC10 Default User Mgmt Template" # Override the switch management template
-# snapshot_file = "data_file.json" # w
+# Optional: the Management User Template of every switch of the run, as --mgmt-template. It must
+# already exist on OV10: the tool does not create it.
+# mgmt_template = "My-SNMP-Template"
 # Optional: place AP Groups (and their APs) in specific OV10 Sites.
 # Defaults to ov4APGroupToOV10SiteMapping.csv in the current directory when present.
 # mapAPGroupsToSites = "ov4APGroupToOV10SiteMapping.csv"
 
 [migration]
-# migration_request_timeout_ms = 2000 # Socket timeout for OVC10 API (fail fast on hangs)
-# migration_request_max_retries = 5 # Retry transient OVC10 failures
-# migration_request_retry_backoff_ms = 500 # Base backoff for migration retries (exponential)
-# migration_request_interval_ms = 100 # Min delay between OVC10 migration requests
+# migration_request_timeout_ms = 30000 # Socket timeout for OV10 API (default 30000: OV10 sometimes takes more than 3 s)
+# Guest Access global configuration and AAA profiles always wait at least 30000
+# migration_request_max_retries = 3 # Attempts per OV10 request, the first one included (default: 3)
+# migration_request_retry_backoff_ms = 500 # Base backoff for migration retries, exponential (default: 500)
+# migration_request_interval_ms = 0 # Min delay between OVC10 migration requests (default: 0; for example 100 to reduce OV10 load)
 # migration_parallel_standalone = true # Parallelize standalone object types only
 # migration_max_workers = 8 # Worker threads for guest/employee account migration (default: 8, lower to reduce OVC10 load)
 
