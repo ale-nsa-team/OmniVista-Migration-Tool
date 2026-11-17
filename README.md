@@ -6,17 +6,7 @@ Migrates the configuration and the devices of OV4 (OVE or OVC4) to OV10 (OVC10 o
 
 ## Download
 
-The binaries are not stored in this repository. Download them from the [latest release](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest):
-
-| File | What it is |
-|---|---|
-| `OVE_OVC4_to_OVNG_migration_updated_1.0.3.zip` | The complete release package (recommended): every file below, in one folder. See [Package Contents](#package-contents). |
-| `migration_tool.exe` | The tool alone |
-| `ovshared-4.9R3.jar` | The official OVE 4.9R3 patch, for OVE sources only (see [Prerequisites](#prerequisites)) |
-| `README.pdf` | This guide, as a PDF |
-| `sha256sum.txt` | The SHA-256 checksum of each release asset |
-
-`config.toml` and `ov4APGroupToOV10SiteMapping.csv` are in the package and in this repository. Put `migration_tool.exe`, `config.toml` and `ov4APGroupToOV10SiteMapping.csv` in the same folder.
+Download the files of the [latest release](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest), and `config.toml` and `ov4APGroupToOV10SiteMapping.csv` from this repository, into one folder. See [Files You Need](#files-you-need).
 
 ## Upgrading From 1.0.1
 
@@ -43,7 +33,7 @@ The binaries are not stored in this repository. Download them from the [latest r
   - [How the Tool Works](#how-the-tool-works)
   - [Terms Used in This Guide](#terms-used-in-this-guide)
   - [Officially Validated Migration Matrix](#officially-validated-migration-matrix)
-  - [Package Contents](#package-contents)
+  - [Files You Need](#files-you-need)
 - [Plan Your Migration](#plan-your-migration)
   - [The Two Phases](#the-two-phases)
   - [What Is Migrated, in Short](#what-is-migrated-in-short)
@@ -120,20 +110,20 @@ A statement that names only OVE, OVC4, OVC10 or OV Terra applies to that product
 > [!IMPORTANT]
 > **Not supported in 1.0.3:** AOS 6x switches (OS6350, OS6450) and third-party devices. OV10 manages them over SNMP, and OV4 4.9R3 does not expose their SNMP credentials, so the tool cannot migrate them. This is an OV4 limitation, not a migration tool error. Support is planned for a later version. Until then, you can add the AOS 6x switches to OV10 by hand, with their SNMP credentials, or keep them managed by OV4: see [Add AOS 6x Switches to OV10 by Hand](#add-aos-6x-switches-to-ov10-by-hand).
 
-### Package Contents
+### Files You Need
 
-The release package `OVE_OVC4_to_OVNG_migration_updated_<version>.zip` holds one folder:
+Put these files in one folder on the computer that runs the tool:
 
-| File | What it is |
-|---|---|
-| `migration_tool.exe` | The tool. Run it in PowerShell, from this folder. |
-| `config.toml` | The configuration template: copy it to `config.local.toml` ([Step 1](#step-1-fill-in-configlocaltoml)). |
-| `ov4APGroupToOV10SiteMapping.csv` | The optional AP Group to Site mapping ([Step 4](#step-4-optional-place-ap-groups-in-several-ov10-sites)). |
-| `README.pdf` | This guide. |
-| `sha256sum.txt` | The SHA-256 checksum of each file above. |
-| `OVE4.9R3.Patches\ovshared-4.9R3.jar` | The official OVE 4.9R3 patch ([Prerequisites](#prerequisites)). |
+| File | Where | What it is |
+|---|---|---|
+| `migration_tool.exe` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The tool. Run it in PowerShell, from this folder. |
+| `config.toml` | This repository | The configuration template: copy it to `config.local.toml` ([Step 1](#step-1-fill-in-configlocaltoml)). |
+| `ov4APGroupToOV10SiteMapping.csv` | This repository | The optional AP Group to Site mapping ([Step 4](#step-4-optional-place-ap-groups-in-several-ov10-sites)). |
+| `ovshared-4.9R3.jar` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The official OVE 4.9R3 patch, for OVE sources only ([Prerequisites](#prerequisites)). It is installed on the OVE server, not run from this folder. |
+| `README.pdf` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | This guide, as a PDF. |
+| `sha256sum.txt` | [Release assets](https://github.com/ale-nsa-team/OmniVista-Migration-Tool/releases/latest) | The SHA-256 checksum of each release asset. |
 
-To check that the files arrived intact, run this in PowerShell, in the extracted folder. Each file should show `OK`. A file that shows `FAILED` is damaged: download the package again.
+To check that the release assets arrived intact, run this in PowerShell, in that folder. Each file should show `OK`. A file that shows `FAILED` is damaged: download it again.
 
 ```powershell
 Get-Content sha256sum.txt | ForEach-Object {
@@ -141,8 +131,6 @@ Get-Content sha256sum.txt | ForEach-Object {
     if ((Get-FileHash $name -Algorithm SHA256).Hash -eq $hash) { "${name}: OK" } else { "${name}: FAILED" }
 }
 ```
-
-The same command checks the separate release assets against the `sha256sum.txt` of the release, in the folder you downloaded them to.
 
 ## Plan Your Migration
 
@@ -172,7 +160,7 @@ The details are in [What Gets Migrated](#what-gets-migrated) and [What's Not Mig
 
 #### On OV4
 
-- **OVE:** install the official OVE 4.9R3 patch on the OVE server before you collect. The release package ships it as `OVE4.9R3.Patches\ovshared-4.9R3.jar`; it is also in the patch repository.
+- **OVE:** install the official OVE 4.9R3 patch on the OVE server before you collect. It is attached to the release as `ovshared-4.9R3.jar`; it is also in the patch repository.
 - **OVC4:** version 4.9.3 GA.
 - **An API token:** Security > External Apps in the OV4 UI. It goes into `config.local.toml` ([Step 1](#step-1-fill-in-configlocaltoml)).
 
@@ -208,7 +196,7 @@ The tool creates the RF profiles, provisioning templates, AP Groups, Management 
 
 - Windows, with PowerShell.
 - HTTPS access to OV4 and to OV10, on port 443 or on the port of their `base_url`. Use a VPN if you work remotely.
-- The release package extracted into a folder. You run every command from that folder.
+- The [files you need](#files-you-need) in one folder. You run every command from that folder.
 
 ## Quick Start
 
@@ -252,7 +240,7 @@ Every step of this phase is non-disruptive: the devices stay managed by OV4, and
 
 ### Step 1: Fill In config.local.toml
 
-1. Open PowerShell in the folder where you extracted the tool.
+1. Open PowerShell in the folder that holds the tool.
 2. Copy the template:
 
    ```powershell
@@ -439,7 +427,7 @@ Failed collection means incomplete data. Migrating incomplete data can make othe
 
 Skip this step if all your AP Groups belong in one OV10 Site, and go to [Step 5](#step-5-migrate-the-configuration). Skipping it is safe: the mapping file ships with every sample row commented out, which means "put every AP Group in the default Site", as in earlier releases.
 
-By default, every AP Group is created in the Site of `site_id` in your config file. To spread your OV4 AP Groups across several OV10 Sites, fill in `ov4APGroupToOV10SiteMapping.csv`, shipped in the same folder as `config.toml` and `migration_tool.exe`. Step 5 then places each AP Group in the Site you mapped it to.
+By default, every AP Group is created in the Site of `site_id` in your config file. To spread your OV4 AP Groups across several OV10 Sites, fill in `ov4APGroupToOV10SiteMapping.csv`, in the same folder as `config.toml` and `migration_tool.exe`. Step 5 then places each AP Group in the Site you mapped it to.
 
 #### 4.1 List Your AP Group Names
 
@@ -968,7 +956,7 @@ When port 443 of the host answers HTTPS, the log also says so. For example, with
 #### OVE Patch Not Applied
 
 - Ask the OVE administrator to check that the patches are installed.
-- The OVE server must run 4.9R3 with the required official patch, shipped in the release package as `OVE4.9R3.Patches\ovshared-4.9R3.jar` ([Package Contents](#package-contents)).
+- The OVE server must run 4.9R3 with the required official patch, attached to the release as `ovshared-4.9R3.jar` ([Files You Need](#files-you-need)).
 
 #### Passwords Missing From the Collected Data (OVE 4.9R3)
 
@@ -1497,10 +1485,10 @@ The SNMP trap receiver, the sFlow collector, Application Visibility and the poli
 - Does not send a Management User Template or a Value Mapping whose name is shorter than 6 characters, an Access Role Profile that binds an AP Group to VLAN 1 or to a VLAN above 4090, or a Local LDAP certificate whose server certificate has expired, which OV10 rejects. Before 1.0.3 they failed with `'"data.name" length must be at least 6 characters long'`, `The VLAN mapping to the AP should be in the range of 0 and 2 to 4090` and `This certificate is expired.`; they are now listed under Not Supported by OV10 ([Not Supported by OV10](#not-supported-by-ov10)).
 - Does not send a service group that holds a service with both a source port and a destination port, which an OVE bug leaves on OVE although OVE does not let such a service be created. Before 1.0.3 the group failed with `All services must have only Source Ports or only Destination Ports.`; it is now listed under Not Supported by OV10, as an OVE bug ([Service Groups With a Service That Has Both Ports](#service-groups-with-a-service-that-has-both-ports-ove-bug)).
 
-**Collection and package**
+**Collection and release**
 
 - During collection, a request that times out is sent again with a longer timeout, and the timeout can be set with `collect_request_timeout_ms`. A wireless certificate that OV4 cannot serve is skipped, instead of failing the whole collection.
-- The release package lists the SHA-256 checksum of each file in `sha256sum.txt`.
+- The release lists the SHA-256 checksum of each asset in `sha256sum.txt`.
 
 **Report and log**
 
